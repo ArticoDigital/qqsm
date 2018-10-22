@@ -5,10 +5,6 @@
         <div class="col-8 row is-columns">
           <div class="row justify-end">
             <figure class="">
-              <img :class="
-/* eslint-disable vue/valid-v-on,vue/no-parsing-error */
-{disabled: helps.public}" @click="public"
-                   src="~@/assets/images/iconayudapublico.png" alt="">
             </figure>
           </div>
           <div class="row justify-center">
@@ -58,7 +54,7 @@
         <div class="row Answers">
           <div class="col-8">
             <figure @click="show(questionNew.answers[orderAns[0]].correct, $event)">
-              <img src="~@/assets/images/btnrespuestader.png" alt="">
+              <img :src="image" alt="">
               <div class="Answers-content row align-center justify-center">
                                 <span v-show="answersShow['1']['1']">
                                     A: {{ questionNew.answers[orderAns[0]].content }}
@@ -66,7 +62,7 @@
               </div>
             </figure>
             <figure @click="show(questionNew.answers[orderAns[1]].correct, $event)">
-              <img src="~@/assets/images/btnrespuestader.png" alt="">
+              <img :src="image" alt="">
               <div class="Answers-content row align-center justify-center">
                                 <span v-show="answersShow['2']['1']">
                                     B: {{ questionNew.answers[orderAns[1]].content }}
@@ -76,7 +72,7 @@
           </div>
           <div class="col-8">
             <figure @click="show(questionNew.answers[orderAns[2]].correct, $event)">
-              <img src="~@/assets/images/btnrespuestaizq.png" alt="">
+              <img :src="image" alt="">
               <div class="Answers-content-der row align-center justify-center">
                                 <span v-show="answersShow['3']['1']">
                                     C: {{ questionNew.answers[orderAns[2]].content }}
@@ -84,7 +80,7 @@
               </div>
             </figure>
             <figure @click="show(questionNew.answers[orderAns[3]].correct, $event)">
-              <img src="~@/assets/images/btnrespuestaizq.png" alt="">
+              <img :src="image" alt="">
               <div class="Answers-content-der row align-center justify-center">
                                 <span v-show="answersShow['4']['1']">
                                     D: {{ questionNew.answers[orderAns[3]].content }}
@@ -141,6 +137,7 @@ import DB from '@/services/questions';
 export default {
   data () {
     return {
+      image: './../../../assets/images/btnrespuestader.png',
       waitQuestion: false,
       callFriend: '',
       questionCurrent: 1,
@@ -212,6 +209,7 @@ export default {
       if (!correct) {
         this.$router.push({name: 'errorgame'});
       }
+      this.image = '~@/assets/images/btnrespuestaverde.png';
       this.nextQuestion();
     },
     nextQuestion: function () {
@@ -330,8 +328,7 @@ export default {
     max-width: 100rem;
     margin: auto;
     text-align: center;
-    figure {
-    }
+
   }
 
   .is-columns {
