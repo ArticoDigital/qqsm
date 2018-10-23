@@ -55,7 +55,7 @@
           <figure @click="nextQuestion" class="Question-correct" v-show="isQuestionCorrect">
             <img src="~@/assets/images/btnpreguntaverde.png" alt="">
             <div class="Question-content row align-center justify-center">
-              <span>¡Repuesta correcta, haz click para ir a la siguiente preguta!</span>
+              <span>¡Repuesta correcta, haz click para ir a la siguiente pregunta!</span>
             </div>
           </figure>
         </div>
