@@ -5,6 +5,8 @@
         <div class="col-8 row is-columns">
           <div class="row justify-end">
             <figure class="">
+              <img :class="{disabled: helps.public}" @click="publicShow"
+                   src="~@/assets/images/iconayudapublico.png" alt="">
             </figure>
           </div>
           <div class="row justify-center">
@@ -50,41 +52,47 @@
               <span>{{ questionNew.question }}</span>
             </div>
           </figure>
+          <figure>
+            <img src="~@/assets/images/btnpregunta.png" alt="">
+            <div class="Question-content row align-center justify-center">
+              <span>¡Repuesta correcta, haz click para ir a la siguiente preguta!</span>
+            </div>
+          </figure>
         </div>
         <div class="row Answers">
           <div class="col-8">
-            <figure @click="show(questionNew.answers[orderAns[0]].correct, $event)">
-              <img :src="image" alt="">
+            <figure @click="show(questionNew.answers[orderAns[0]].correct, 'imageDer1', true)">
+              <img :src="imageDer1" alt="">
               <div class="Answers-content row align-center justify-center">
-                                <span v-show="answersShow['1']['1']">
-                                    A: {{ questionNew.answers[orderAns[0]].content }}
-                                </span>
+                <span v-show="answersShow['1']['1']">
+                  A: {{ questionNew.answers[orderAns[0]].content }}
+                </span>
               </div>
             </figure>
-            <figure @click="show(questionNew.answers[orderAns[1]].correct, $event)">
-              <img :src="image" alt="">
+            <figure @click="show(questionNew.answers[orderAns[1]].correct, 'imageDer2', true)">
+              <img :src="imageDer2" alt="">
               <div class="Answers-content row align-center justify-center">
-                                <span v-show="answersShow['2']['1']">
-                                    B: {{ questionNew.answers[orderAns[1]].content }}
-                                </span>
+                <span v-show="answersShow['2']['1']">
+                  B: {{ questionNew.answers[orderAns[1]].content }}
+                </span>
               </div>
             </figure>
           </div>
           <div class="col-8">
-            <figure @click="show(questionNew.answers[orderAns[2]].correct, $event)">
-              <img :src="image" alt="">
+            <figure @click="show(questionNew.answers[orderAns[2]].correct, 'imageIzq1')">
+              <img :src="imageIzq1" alt="">
               <div class="Answers-content-der row align-center justify-center">
-                                <span v-show="answersShow['3']['1']">
-                                    C: {{ questionNew.answers[orderAns[2]].content }}
-                                </span>
+                <span v-show="answersShow['3']['1']">
+                  C: {{ questionNew.answers[orderAns[2]].content }}
+                </span>
               </div>
             </figure>
-            <figure @click="show(questionNew.answers[orderAns[3]].correct, $event)">
-              <img :src="image" alt="">
+            <figure @click="show(questionNew.answers[orderAns[3]].correct, 'imageIzq2')">
+              <img :src="imageIzq2" alt="">
               <div class="Answers-content-der row align-center justify-center">
-                                <span v-show="answersShow['4']['1']">
-                                    D: {{ questionNew.answers[orderAns[3]].content }}
-                                </span>
+                <span v-show="answersShow['4']['1']">
+                  D: {{ questionNew.answers[orderAns[3]].content }}
+                </span>
               </div>
             </figure>
           </div>
@@ -137,7 +145,10 @@ import DB from '@/services/questions';
 export default {
   data () {
     return {
-      image: './../../../assets/images/btnrespuestader.png',
+      imageDer1: require('@/assets/images/btnrespuestader.png'),
+      imageDer2: require('@/assets/images/btnrespuestader.png'),
+      imageIzq1: require('@/assets/images/btnrespuestaizq.png'),
+      imageIzq2: require('@/assets/images/btnrespuestaizq.png'),
       waitQuestion: false,
       callFriend: '',
       questionCurrent: 1,
@@ -177,6 +188,7 @@ export default {
     }
   },
   created () {
+    console.log(this.image);
     let i = 0;
     let j = 0;
     while (j < 4) {
@@ -201,19 +213,19 @@ export default {
     this.answersShow[4][2] = this.questionNew.answers[this.orderAns[3]].correct;
   },
   methods: {
-    show (correct, e) {
-      console.log(e.target);
+    show (correct, e, isDer) {
+      this[e] = (isDer) ? require('@/assets/images/respuestaverdeder.png')
+        : require('@/assets/images/respuestaverdeizq.png');
+      document.getElementById('correct').play();
       if (this.waitQuestion) {
         return;
       }
       if (!correct) {
         this.$router.push({name: 'errorgame'});
       }
-      this.image = '~@/assets/images/btnrespuestaverde.png';
-      this.nextQuestion();
+      // this.nextQuestion();
     },
     nextQuestion: function () {
-      document.getElementById('correct').play();
       this.question = DB[this.level][this.order[this.questionCurrent]];
       this.questionCurrentTotal++;
       if (this.questionCurrent === 4) {
@@ -252,7 +264,7 @@ export default {
     correctPublic: function (s) {
       return this.answersShow[s][2];
     },
-    public () {
+    publicShow () {
       if (!this.helps.public) {
         this.helps.public = true;
         this.helpsShow.public = true;
