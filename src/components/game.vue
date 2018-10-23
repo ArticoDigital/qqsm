@@ -190,6 +190,7 @@ export default {
       return this.question;
     }
   },
+
   created () {
     console.log(this.image);
     let i = 0;
@@ -383,7 +384,7 @@ export default {
 
   .Question {
     position: relative;
-    &-correct{
+    &-correct {
       cursor: pointer;
     }
     figure {

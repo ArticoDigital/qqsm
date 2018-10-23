@@ -23,6 +23,15 @@
         </main>
     </div>
 </template>
+<script>
+export default {
+  methods: {
+    soundStart () {
+      document.getElementById('audio').play();
+    }
+  }
+};
+</script>
 
 <style scoped>
     main {
