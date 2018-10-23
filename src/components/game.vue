@@ -46,14 +46,14 @@
       </header>
       <footer>
         <div class="Question">
-          <figure>
+          <figure v-show="!isQuestionCorrect">
             <img src="~@/assets/images/btnpregunta.png" alt="">
             <div class="Question-content row align-center justify-center">
               <span>{{ questionNew.question }}</span>
             </div>
           </figure>
-          <figure>
-            <img src="~@/assets/images/btnpregunta.png" alt="">
+          <figure @click="nextQuestion" class="Question-correct" v-show="isQuestionCorrect">
+            <img src="~@/assets/images/btnpreguntaverde.png" alt="">
             <div class="Question-content row align-center justify-center">
               <span>¡Repuesta correcta, haz click para ir a la siguiente preguta!</span>
             </div>
@@ -145,6 +145,8 @@ import DB from '@/services/questions';
 export default {
   data () {
     return {
+      currentQuestionCorrect: '',
+      isDer: '',
       imageDer1: require('@/assets/images/btnrespuestader.png'),
       imageDer2: require('@/assets/images/btnrespuestader.png'),
       imageIzq1: require('@/assets/images/btnrespuestaizq.png'),
@@ -158,6 +160,7 @@ export default {
       question: {},
       order: [],
       orderAns: [],
+      isQuestionCorrect: false,
       helps: {
         50: false,
         'call': false,
@@ -214,6 +217,11 @@ export default {
   },
   methods: {
     show (correct, e, isDer) {
+      if (this.isQuestionCorrect) {
+        return;
+      }
+      this.currentQuestionCorrect = e;
+      this.isDer = isDer;
       this[e] = (isDer) ? require('@/assets/images/respuestaverdeder.png')
         : require('@/assets/images/respuestaverdeizq.png');
       document.getElementById('correct').play();
@@ -223,9 +231,13 @@ export default {
       if (!correct) {
         this.$router.push({name: 'errorgame'});
       }
+      this.isQuestionCorrect = true;
       // this.nextQuestion();
     },
     nextQuestion: function () {
+      this[this.currentQuestionCorrect] = (this.isDer) ? require('@/assets/images/btnrespuestader.png')
+        : require('@/assets/images/btnrespuestaizq.png');
+      this.isQuestionCorrect = false;
       this.question = DB[this.level][this.order[this.questionCurrent]];
       this.questionCurrentTotal++;
       if (this.questionCurrent === 4) {
@@ -265,12 +277,18 @@ export default {
       return this.answersShow[s][2];
     },
     publicShow () {
+      if (this.isQuestionCorrect) {
+        return;
+      }
       if (!this.helps.public) {
         this.helps.public = true;
         this.helpsShow.public = true;
       }
     },
     call () {
+      if (this.isQuestionCorrect) {
+        return;
+      }
       if (!this.helps.call) {
         this.helps.call = true;
         this.helpsShow.call = true;
@@ -282,6 +300,9 @@ export default {
       }
     },
     fifty () {
+      if (this.isQuestionCorrect) {
+        return;
+      }
       if (!this.helps[50]) {
         let count = 0;
         this.helps[50] = true;
@@ -362,6 +383,12 @@ export default {
 
   .Question {
     position: relative;
+    &-correct{
+      cursor: pointer;
+    }
+    figure {
+      position: relative;
+    }
     .Question-content {
       position: absolute;
       color: white;
